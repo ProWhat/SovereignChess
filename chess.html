@@ -1,0 +1,731 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>Chess</title>
+	
+	<style>		
+		body {
+                	background-color: #007755;
+                	width: 1280px;
+			height: 720px;
+            	}
+		
+		
+		
+		.divDesk {
+			position: absolute;
+    			left: 250px;
+    			top: 20px;
+			width: 840px;
+			height: 840px;
+			background-color: rgb(100, 60, 40);
+		}
+		.divDeskBox {
+			position: relative;
+    			left: 5px;
+    			top: 5px;
+			width: 830px;
+			height: 830px;
+			background-color: rgb(180, 120, 85);
+		}
+		.divLine1 {
+			position: absolute;
+    			left: 419px;
+    			top: 5px;
+			width: 2px;
+			height: 830px;
+			background-color: rgb(100, 60, 40);
+		}
+		.divLine2 {
+			position: absolute;
+    			left: 5px;
+    			top: 419px;
+			width: 830px;
+			height: 2px;
+			background-color: rgb(100, 60, 40);
+		}
+		.divBox1 {
+			position: absolute;
+    			left: 315px;
+    			top: 315px;
+			width: 210px;
+			height: 210px;
+			background-color: rgb(100, 60, 40);
+		}
+		.divBox2 {
+			position: relative;
+    			left: 2px;
+    			top: 2px;
+			width: 206px;
+			height: 206px;
+			background-color: rgb(180, 120, 85);
+		}
+		.divTile {
+			position: absolute;
+                	width: 50px;
+			height: 50px;
+            	}
+		.divTileInF {
+			position: absolute;
+                	width: 46px;
+			height: 46px;
+            	}
+		.divTileF {
+			position: relative;
+                	width: 46px;
+			height: 46px;
+            	}
+		
+		
+		
+		.divTileBoxUP {
+			position: absolute;
+    			left: 1100px;
+    			top: 20px;
+			width: 60px;
+			height: 280px;
+			background-color: #007755;
+			visibility: hidden;
+		}
+		.divTileUP {
+			position: absolute;
+                	width: 50px;
+			height: 50px;
+            	}
+		.divTileInFUP {
+			position: absolute;
+                	width: 46px;
+			height: 46px;
+            	}
+		.divTileFUP {
+			position: relative;
+                	width: 46px;
+			height: 46px;
+            	}
+		
+		
+		
+		.divTileBoxRE {
+			position: absolute;
+    			left: 180px;
+    			top: 20px;
+			width: 60px;
+			height: 280px;
+			background-color: #007755;
+		}
+		.divTileRE {
+			position: absolute;
+                	width: 50px;
+			height: 50px;
+            	}
+		.divTileInFRE {
+			position: absolute;
+                	width: 46px;
+			height: 46px;
+            	}
+		.divTileFRE {
+			position: relative;
+                	width: 46px;
+			height: 46px;
+            	}
+		
+		
+		
+		#db1 {
+			position: absolute;
+    			left: 25px;
+    			top: 5px;
+    			font-size: 25px;
+    			color: #462300;
+		}
+		#db2 {
+			position: absolute;
+    			left: 25px;
+    			top: 35px;
+    			font-size: 25px;
+    			color: #462300;
+		}
+		#db3 {
+			position:absolute;
+    			left: 25px;
+    			top: 65px;
+    			font-size: 25px;
+    			color: #462300;
+		}
+		#db4 {
+			position:absolute;
+    			left: 25px;
+    			top: 95px;
+    			font-size: 25px;
+    			color: #462300;
+		}
+		#db5 {
+			position:absolute;
+    			left: 25px;
+    			top: 125px;
+    			font-size: 25px;
+    			color: #462300;
+		}
+		#db6 {
+			position:absolute;
+    			left: 25px;
+    			top: 155px;
+    			font-size: 25px;
+    			color: #462300;
+		}
+		#db7 {
+			position:absolute;
+    			left: 25px;
+    			top: 185px;
+    			font-size: 25px;
+    			color: #462300;
+		}
+		#db8 {
+			position:absolute;
+    			left: 25px;
+    			top: 205px;
+    			font-size: 25px;
+    			color: #462300;
+		}
+	</style>
+	
+	
+	
+	<script src="click.js"></script>	<!- 	Скрипт отвечающий за нажатие на фигуру и организацию движения фигур 	->
+	
+	<script src="init.js"></script>		<!- 	Скрипт отвечающий за отображение доски и фигур 				->
+	
+	<script src="logai.js"></script>	<!- 	Скрипт отвечающий за логику ИИ		 				->
+	
+	<script>
+		
+		
+		
+		function maxRand(max)					// Функция рандома, где "max" - кол-во возможных значений
+		{
+			return Math.floor(Math.random() * max);
+		}
+		
+		function srcTile()					// Функция связывающая элементы HTML с массивами для простого обращения
+		{							// Хуево кстати !!!
+			var countT = 0;
+			
+			for (var i = 0; i < tileX; i++)
+			{
+				for (var j = 0; j < tileY; j++)
+				{
+					mas[j][i] = document.getElementById("div" + countT + "T");
+					masInF[j][i] = document.getElementById("div" + countT + "TInF");
+					masF[j][i] = document.getElementById("div" + countT + "TF");
+					countT++;
+				}
+			}
+		}
+		
+		function keyDown()					// Функция обработки нажатий на клавиатуру
+		{
+			if (event.keyCode == 37 || event.keyCode == 39 ||event.keyCode == 38 || event.keyCode == 40 ||
+				event.keyCode == 65 || event.keyCode == 68 ||event.keyCode == 87 || event.keyCode == 83)
+			{
+				self.focus;
+				document.body.focus();
+			}
+		}
+		
+		
+		
+		var nowH = 1;
+		var lastColD = 0;	// Запоминаем цвет исключительно для наведения
+		
+		function mOver(idTmOver)
+		{
+			var elemD = document.getElementById(idTmOver);
+			
+			db1.innerText = elemD.children[1].index;		// !!! DEBUG !!!
+			
+			var tX = 0;
+			var tY = 0;
+			
+			for (var i = 0; i < tileY; i++)
+			{
+				for (var j = 0; j < tileX; j++)
+				{
+					if (mas[j][i] == elemD)
+					{
+						tX = j;
+						tY = i;
+					}
+				}
+			}
+			
+			db2.innerText = tX + "/" + tY;				// !!! DEBUG !!!
+			db3.innerText = elemD.children[1].id;			// !!! DEBUG !!!
+			
+			lastColD = elemD.style.background;
+			lastColP = elemD.style.background;
+			
+			if (elemD.name == 1)
+				return;
+			
+			elemD.style.background = "rgb(180, 120, 85)";
+		}
+		
+		function mOut(idTmOut)
+		{
+			var elemD = document.getElementById(idTmOut);
+			
+			if (elemD.name == 1)
+				return;
+			
+			elemD.style.background = lastColD;
+		}
+		
+		var figUP = 0;
+		var figUPX = 0;
+		var figUPY = 0;
+		
+		function clickUP(idTUP)					// Функция производящая замену пешки на выбранную фигуру
+		{
+			if (up == 0)
+				return;
+			
+			if (idTUP[3] == 6)
+			{
+				for (var i = 0; i < tileY; i++)			// Определяем текущего короля и удаляем его
+				{
+					for (var j = 0; j < tileX; j++)
+					{
+						if(("" + masF[j][i].index)[0] == 6 && ("" + masF[j][i].index)[3] == nowH)
+						{
+							if (checker(j, i, figUPX, figUPY) == 1)		// Проверяем на шах после повышения в короля
+								return;
+							
+							masF[j][i].style.background = mas[j][i].style.background;
+							masF[j][i].index = mas[j][i].index;
+						}
+					}
+				}
+				
+				if (nowH == 1)				// Отключение возможности рокировки если пешка стала королем
+					kingRock1 = 0;
+				else
+					kingRock2 = 0;
+			}
+			
+			var col = 0;
+			
+			if (("" + figUP.children[1].index)[1] == 0)						// Правильно определяем цвет
+				col = ("" + figUP.children[1].index)[2];
+			else
+				col = ("" + figUP.children[1].index)[1] + ("" + figUP.children[1].index)[2];
+			
+			figUP.children[1].style.background = "no-repeat url(images/f" + idTUP[3] + "-" + col + ".png)";				// Производим замену (повышение)
+			figUP.children[1].index = idTUP[3] + ("" + figUP.children[1].index)[1] + ("" + figUP.children[1].index)[2] + nowH;
+			
+			
+			
+			if (nowH == 1)				// Меняем игрока					// ******************************
+			{
+				nowH = 2;
+				masFRE[0].style.background = "no-repeat url(images/f6-" + colP2 + ".png)";
+				if (idTUP[3] == 6)
+					colP1 = col;
+			}
+			else
+			{
+				nowH = 1;
+				masFRE[0].style.background = "no-repeat url(images/f6-" + colP1 + ".png)";
+				if (idTUP[3] == 6)
+					colP2 = col;
+			}
+			
+			for (var i = 1; i < 16; i++)
+				masRE[i].style.visibility = "hidden";
+			
+			
+			if (idTUP[3] == 6)
+			{
+				for (var nc = 0; nc < 12; nc++)		// Сначало забираем контроль со всех цветных фигур
+				{
+					var tileCon = 0;
+					
+					for (var i = 0; i < tileX; i++)
+						for (var j = 0; j < tileY; j++)
+							if (mas[j][i].index < 12 && mas[j][i].index == nc)
+								tileCon = mas[j][i];
+					
+					lostCon(tileCon, 0);
+				}
+				
+				for (var nc = 0; nc < 12; nc++)		// Затем возращаем контроль для цветных фигур, если они захвачены
+				{
+					for (var i = 0; i < tileX; i++)
+						for (var j = 0; j < tileY; j++)
+							if (mas[j][i].index < 12 && mas[j][i].index != masF[j][i].index && mas[j][i].index == nc)
+								if (("" + masF[j][i].index)[3] == 1)
+									newCon(mas[j][i], 1);
+								else if (("" + masF[j][i].index)[3] == 2)
+									newCon(mas[j][i], 2);
+								else if (("" + masF[j][i].index)[3] == 0)	// TEST ***
+									masCon[nc] = 3;
+				}
+			}
+			
+			clickRE();
+			
+			up = 0;
+			
+			divTileBoxUP.style.visibility = "hidden";	// Скрываем кнопки после нажатия
+		}
+		
+		function htmlBoxTileUP()		// Функция для вывода на экран клеток с фигурами повышения
+		{
+			var tileCountUP = 2;
+			
+			document.writeln("<div class='divTileBoxUP' id='divTileBoxUP'>");
+			
+			for (var i = 0; i < 5; i++)			// Выводим UP
+			{
+				var tY = i * 52 + 5;
+				var tX = 5;
+				document.writeln("<div class='divTileUP' name='"+0+"' id='div" + tileCountUP + "TUP' onmouseover='mOver(this.id)' onmouseout='mOut(this.id)' onclick='clickUP(this.id)'  index='0' style='left:" + tX + "px; top: " + tY + "px;'>" + 
+							"<div class='divTileInFUP' name='"+0+"' id='div" + tileCountUP + "TInFUP'  index='0' style='left: 2px; top: 2px; background: no-repeat url();'>" + 
+							"</div>" + 
+							"<div class='divTileFUP' name='"+0+"' id='div" + tileCountUP + "TFUP'  index='0' style='left: 2px; top: 2px; background: no-repeat url();'>" + 
+							"</div>" + 
+						"</div>");
+				
+				tileCountUP++;
+			}
+			
+			document.writeln("</div>");
+			
+			for (var i = 2; i < 7; i++)
+			{
+				masUP[i] = document.getElementById("div" + i + "TUP");
+				masInFUP[i] = document.getElementById("div" + i + "TInFUP");
+				masFUP[i] = document.getElementById("div" + i + "TFUP");
+			}
+		}
+		
+		
+		
+		var onKing = 0;
+		
+		function clickREF(idRE)			// Функция производящая замену короля на выбранного и перераспределяющая контроль цветов
+		{
+			if (up == 1)
+				return;
+			
+			if (checker(0, 0, 0, 0) == 1 || checker(15, 15, 15, 15) == 1)		// Мнимые проверки шаха, для отслеживания варианта когда король стоит на месте
+				return;								// То-есть блокировка замены в случае шаха
+			
+			var col = 0;
+			var kX = 0;
+			var kY = 0;
+			var kingRes = 0;
+									
+			if (("" + idRE.children[1].index)[0] == 0)			// Правильно определяем цвет
+				col = ("" + idRE.children[1].index)[1];
+			else
+				col = ("" + idRE.children[1].index)[0] + ("" + idRE.children[1].index)[1];
+			
+			for (var i = 0; i < tileY; i++)			// Определяем короля и его координаты и заменяем на выбранного
+			{
+				for (var j = 0; j < tileX; j++)
+				{
+					if(("" + masF[j][i].index)[0] == 6 && ("" + masF[j][i].index)[3] == nowH)
+					{
+						kingRes = masF[j][i].index;					// Запоминаем индекс короля, для отката после чекера
+						masF[j][i].index = "6" + idRE.children[1].index + nowH;
+						kX = j;
+						kY = i;
+					}
+				}
+			}
+			
+			var colP1Res = colP1;		// Создаем резерв значений для их отката в случае возврата после чекера шаха
+			var colP2Res = colP2;
+			
+			if (nowH == 1)				// Меняем переменную основного цвета
+				colP1 = col;
+			else
+				colP2 = col;
+			
+			if (checker(0, 0, 0, 0) == 1 || checker(15, 15, 15, 15) == 1)		// Мнимые проверки шаха, для отслеживания варианта когда король стоит на месте
+			{
+				colP1 = colP1Res;			// Возвращаем исходные значения переменным переменным
+				colP2 = colP2Res;
+				masF[kX][kY].index = kingRes;
+				return;
+			}
+			
+			masF[kX][kY].style.background = "no-repeat url(images/f6-" + col + ".png)";		// Меняем иконку короля
+			
+			for (var i = 1; i < 16; i++)
+				masRE[i].style.visibility = "hidden";
+			
+			
+			
+			for (var nc = 0; nc < 12; nc++)		// Сначало забираем контроль со всех цветных фигур
+			{
+				var tileCon = 0;
+				
+				for (var i = 0; i < tileX; i++)
+					for (var j = 0; j < tileY; j++)
+						if (mas[j][i].index < 12 && mas[j][i].index == nc)
+							tileCon = mas[j][i];
+				
+				lostCon(tileCon, 0);
+			}
+			
+			for (var nc = 0; nc < 12; nc++)		// Затем возращаем контроль для цветных фигур, если они захвачены
+			{
+				for (var i = 0; i < tileX; i++)
+					for (var j = 0; j < tileY; j++)
+						if (mas[j][i].index < 12 && mas[j][i].index != masF[j][i].index && mas[j][i].index == nc)
+							if (("" + masF[j][i].index)[3] == 1)
+								newCon(mas[j][i], 1);
+							else if (("" + masF[j][i].index)[3] == 2)
+								newCon(mas[j][i], 2);
+							else if (("" + masF[j][i].index)[3] == 0)	// TEST ***
+								masCon[nc] = 3;
+			}
+			
+			
+			
+			
+			if (nowH == 1)				// Меняем игрока и завершаем ход, если король не на своем цвете
+			{
+				if (mas[kX][kY].index != (("" + masF[kX][kY].index)[1] + ("" + masF[kX][kY].index)[2]))
+				{
+					nowH = 2;
+					masFRE[0].style.background = "no-repeat url(images/f6-" + colP2 + ".png)";
+				}
+				else
+				{
+					onKing = 1;
+					masFRE[0].style.background = "no-repeat url(images/f6-" + colP1 + ".png)";
+				}
+			}
+			else
+			{
+				if (mas[kX][kY].index != (("" + masF[kX][kY].index)[1] + ("" + masF[kX][kY].index)[2]))
+				{
+					nowH = 1;
+					masFRE[0].style.background = "no-repeat url(images/f6-" + colP1 + ".png)";
+				}
+				else
+				{
+					onKing = 1;
+					masFRE[0].style.background = "no-repeat url(images/f6-" + colP2 + ".png)";
+				}
+			}
+			
+			clickRE();		// Отображаем королей для смены после перераспределения контроля
+		}
+		
+		function clickRE()			// Функция добавляющая доступных для смены королей
+		{
+			var numRE = 1;
+			
+			for (var i = 0; i < 14; i++)
+			{
+				if (masCon[i] == nowH && i != colP1 && i != colP2)
+				{
+					masFRE[numRE].style.background = "no-repeat url(images/f6-" + i + ".png)";
+					
+					if (i < 10)
+						masFRE[numRE++].index = "0" + i;
+					else
+						masFRE[numRE++].index = i;
+				}
+			}
+			
+			for (var i = 1; i < numRE; i++)
+				masRE[i].style.visibility = "visible";
+		}
+		
+		function htmlBoxTileRE()		// Функция для вывода на экран клеток с королями для смены
+		{
+			var tileCountRE = 0;
+			
+			document.writeln("<div class='divTileBoxRE' id='divTileBoxRE'>");
+			
+			for (var i = 0; i < 16; i++)			// Выводим RE
+			{
+				var tY = i * 52 + 5;
+				var tX = 5;
+				document.writeln("<div class='divTileRE' name='"+0+"' id='div" + tileCountRE + "TRE' onmouseover='mOver(this.id)' onmouseout='mOut(this.id)'onclick=' clickREF(this)' index='0' style='left:" + tX + "px; top: " + tY + "px;'>" + 
+							"<div class='divTileInFRE' name='"+0+"' id='div" + tileCountRE + "TInFRE'  index='0' style='left: 2px; top: 2px; background: no-repeat url();'>" + 
+							"</div>" + 
+							"<div class='divTileFRE' name='"+0+"' id='div" + tileCountRE + "TFRE'  index='0' style='left: 2px; top: 2px; background: no-repeat url();'>" + 
+							"</div>" + 
+						"</div>");
+				
+				tileCountRE++;
+			}
+			
+			document.writeln("</div>");
+			
+			for (var i = 0; i < 16; i++)
+			{
+				masRE[i] = document.getElementById("div" + i + "TRE");
+				masInFRE[i] = document.getElementById("div" + i + "TInFRE");
+				masFRE[i] = document.getElementById("div" + i + "TFRE");
+			}
+			
+			masRE[0].onclick = clickRE;
+			masFRE[0].style.background = "no-repeat url(images/f6-0.png)";
+			
+			for (var i = 1; i < 16; i++)
+				masRE[i].style.visibility = "hidden";
+		}
+		
+		
+//		
+//		INDEX :
+//		
+//		1 + - пешка
+//		2 + - ладья
+//		3 + - конь
+//		4 + - слон
+//		5 + - королева
+//		6 + - король
+//		
+//		00 - белый цвет			rgb(240, 240, 240)
+//		01 - черный цвет		rgb(40, 40, 40)
+//		02 - розовый цвет		rgb(255, 174, 200)
+//		03 - темно-серый цвет		rgb(100, 100, 100)
+//		04 - красный цвет		rgb(200, 16, 26)
+//		05 - оранжевый цвет		rgb(255, 127, 39)
+//		06 - желтый цвет		rgb(255, 242, 0)
+//		07 - зеленый цвет		rgb(40, 210, 90)
+//		08 - голубой цвет		rgb(0, 162, 232)
+//		09 - синий цвет			rgb(63, 72, 204)
+//		10 - светло-серый цвет		rgb(190, 190, 190)
+//		11 - сиреневый цвет		rgb(163, 73, 164)
+//		12 - светло-желтый фон		rgb(239, 228, 176)
+//		13 - темно-желтый фон		rgb(223, 201, 96)
+//		
+//		0 - ничейная фигура
+//		1 - игрок 1 (белые)
+//		2 - игрок 2 (черные)
+//		
+//		(фигура)-(цвет фигуры)-(под чьим контролем)
+//		
+		
+		
+		
+		
+	</script>
+</head>
+
+<body onKeyDown="keyDown()" unselectable="on" scroll="no">
+	
+	<div>
+		<span id="db1"></span>			<!-- 	Вывод различных значений для дебага 	-->
+		<span id="db2"></span>
+		<span id="db3"></span>
+		<span id="db4"></span>
+		<span id="db5"></span>
+		<span id="db6"></span>
+		<span id="db7"></span>
+		<span id="db8"></span>
+	</div>
+	
+	
+	
+	<script>
+		var tileX = 16; //Размер поля по вертикали
+		var tileY = 16; //Размер поля по горизонтали
+		
+		var tileCount = 0;
+		
+		var mas = new Array(tileX);			// Массив клеток
+		
+		for (var i = 0; i < mas.length; i++)
+		{
+			mas[i] = new Array(tileY);
+		}
+		
+		var masF = new Array(tileX);			// Массив фигур
+		
+		for (var i = 0; i < masF.length; i++)
+		{
+			masF[i] = new Array(tileY);
+		}
+		
+		var masInF = new Array(tileX);			// Массив чего-то
+		
+		for (var i = 0; i < masInF.length; i++)
+		{
+			masInF[i] = new Array(tileY);
+		}
+		
+		document.writeln("<div class='divDesk'><div class='divDeskBox'></div>");
+		document.writeln("<div class='divLine1'></div><div class='divLine2'></div>");
+		document.writeln("<div class='divBox1'><div class='divBox2'></div></div>");
+		
+		for (var i = 0; i < tileY; i++)		// Выводим все необходимые элементы на экран
+		{
+			for (var j = 0; j < tileX; j++)
+			{
+				var tY = i * 52 + 5;
+				var tX = j * 52 + 5;
+				document.writeln("<div class='divTile' name='"+0+"' id='div" + tileCount + "T' onmouseover='mOver(this.id)' onmouseout='mOut(this.id)' onclick='clickT(this.id); clickBut();'  index='0' style='left:" + tX + "px; top: " + tY + "px;'>" + 
+							"<div class='divTileInF' name='"+0+"' id='div" + tileCount + "TInF'  index='0' style='left: 2px; top: 2px; background: no-repeat url();'>" + 
+							"</div>" + 
+							"<div class='divTileF' name='"+0+"' id='div" + tileCount + "TF'  index='0' style='left: 2px; top: 2px; background: no-repeat url();'>" + 
+							"</div>" + 
+						"</div>");
+				
+				tileCount += 1;
+			}
+		}					// <p>" + i + "/" + j + " - " + tileCount + "</p>	// Если необходимо отобразить координаты на клетках
+		
+		document.writeln("</div>");
+		
+		
+		
+		var masUP = new Array(5);			// Массив клеток UP
+		var masFUP = new Array(5);			// Массив фигур UP
+		var masInFUP = new Array(5);			// Массив чего-то UP
+		
+		htmlBoxTileUP();				// Выводим клетки для фигур повышения
+		
+		
+		
+		var masRE = new Array(16);			// Массив клеток RE
+		var masFRE = new Array(16);			// Массив фигур RE
+		var masInFRE = new Array(16);			// Массив чего-то RE
+		
+		htmlBoxTileRE();				// Выводим клетки для RE
+		
+		
+		
+		srcTile();		// Связываем элементы HTML с массивами
+		deskColor(1);		// Разукрашиваем доску
+		deskFig();		// Раставляем фигуры
+		
+		elem = mas[0][0];			// Надо для правильной работы
+		lastCol = elem.style.background;	// Тоже надо
+		
+	//	masCon[0] = 1;				// Для правильной работы отмены контроля фигур посл смены короля (надо убрать)
+	//	masCon[1] = 2;
+		
+	</script>
+	
+	
+	
+	<script src="checkmate.js"></script>	<!- 	Скрипт отвечающий за шах и мат		 				->
+	
+	
+	
+	<noscript><h3>Скрипт выключен, измени настройки безопасность (желтая полоска сверху)</h3></noscript>
+</body>
+</html>
+
+
+
+
